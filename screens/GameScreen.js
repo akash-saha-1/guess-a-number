@@ -6,7 +6,9 @@ import {
   Alert,
   ScrollView,
   FlatList,
+  Dimensions,
 } from "react-native";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import MainButton from "../components/MainButton";
@@ -31,6 +33,8 @@ const renderListItem = (listLength, itemData) => (
   </View>
 );
 const GameScreen = (props) => {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
   const initialGuess = generateRandomNumber(1, 99, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([]);
@@ -75,10 +79,10 @@ const GameScreen = (props) => {
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <MainButton onPress={nextGuesshandler.bind(this, "lower")}>
-          <Ionicons name="md-remove" size={26} color="white" />
+          <Ionicons name="md-remove" size={24} color="white" />
         </MainButton>
         <MainButton onPress={nextGuesshandler.bind(this, "greater")}>
-          <Ionicons name="md-add" size={26} color="white" />
+          <Ionicons name="md-add" size={24} color="white" />
         </MainButton>
       </Card>
       <View style={styles.listContainer}>
@@ -107,7 +111,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
+    //marginTop: 20,
+    marginTop: Dimensions.get("window").height > 600 ? 20 : 10,
     width: 400,
     maxWidth: "90%",
   },
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   listContainer: {
-    width: "70%",
+    width: Dimensions.get("window").width > 350 ? "65%" : "80%",
     flex: 1,
   },
   list: {
